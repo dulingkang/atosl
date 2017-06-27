@@ -118,4 +118,3 @@ int main(int argc, char *argv[]){
     int result = symbolicate(arch, executable, addresses, numofaddresses);
     return result;
 }
-

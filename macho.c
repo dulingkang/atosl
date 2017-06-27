@@ -1414,8 +1414,10 @@ void free_target_file(struct target_file *tf){
 int select_thin_macho_by_arch(struct target_file *tf, const char *target_arch){
     int i = 0;
     char *arch = NULL;
+    printf("arch numbers: %d\n", tf->numofarchs);
     while(i < tf->numofarchs){
         struct thin_macho *thin_macho = tf->thin_machos[i];
+        printf("i = %d, arch =  %d\n", i, thin_macho->cputype);
         switch(thin_macho->cputype){
            case CPU_TYPE_ARM:
                {
@@ -1463,8 +1465,14 @@ int select_thin_macho_by_arch(struct target_file *tf, const char *target_arch){
                //ppc64
                arch = "ppc64";
                break;
+            case CPU_TYPE_ARM64:
+                //ppc64
+                arch = "arm64";
+                break;
+
         }
         if (arch != NULL && strcmp(arch, target_arch) == 0){
+          printf("parse arch =  %s\n", arch);
             return i;
         }
         i++;
@@ -2037,8 +2045,14 @@ static char * read_attribute_value (struct attribute *attr, unsigned int form, c
             info_ptr += bytes_read;
             info_ptr = read_attribute_value (attr, form, info_ptr, cu);
             break;
+        case DW_FORM_sec_offset:
+            attr->u.addr = cu->header.offset + read_8_bytes (info_ptr);
+            info_ptr += 8;
+            break;
+        case DW_FORM_flag_present:
+            break;
         default:
-            fprintf(stderr, "Dwarf Error: Cannot handle  in DWARF reader [in module s]");
+            fprintf(stderr, "Dwarf Error: Cannot handle  in DWARF reader [in module s]:%d", form);
             //   dwarf_form_name (form),
             //   bfd_get_filename (abfd));
     }

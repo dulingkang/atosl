@@ -239,6 +239,23 @@ enum dwarf_form
     DW_FORM_ref8 = 0x14,
     DW_FORM_ref_udata = 0x15,
     DW_FORM_indirect = 0x16,
+    DW_FORM_sec_offset = 0x17, /* DWARF4 */
+    DW_FORM_exprloc = 0x18, /* DWARF4 */
+    DW_FORM_flag_present = 0x19, /* DWARF4 */
+    DW_FORM_strx = 0x1a, /* DWARF5 */
+    DW_FORM_addrx = 0x1b, /* DWARF5 */
+    DW_FORM_ref_sup = 0x1c, /* DWARF5 */
+    DW_FORM_strp_sup = 0x1d, /* DWARF5 */
+    DW_FORM_data16 = 0x1e, /* DWARF5 */
+    DW_FORM_line_strp = 0x1f, /* DWARF5 */
+    DW_FORM_ref_sig8 = 0x20, /* DWARF4 */
+    DW_FORM_implicit_const = 0x21, /* DWARF5 */
+    DW_FORM_loclistx = 0x22, /* DWARF5 */
+    DW_FORM_rnglistx = 0x23, /* DWARF5 */
+    DW_FORM_GNU_addr_index = 0x1f01, /* GNU extension in debug_info.dwo.*/
+    DW_FORM_GNU_str_index = 0x1f02, /* GNU extension, somewhat like DW_FORM_strp */
+    DW_FORM_GNU_ref_alt = 0x1f20, /* GNU extension. Offset in .debug_info. */
+    DW_FORM_GNU_strp_alt = 0x1f21, /* GNU extension. Offset in .debug_str of another object file. */
     DW_FORM_APPLE_db_str = 0x50
 };
 

@@ -47,7 +47,6 @@ clean:
 
 install:
 	cp atosl /usr/local/bin/atosl
-	cp atosl /opt/bin/atosl
 
 test:
 	sh ./test/test.sh

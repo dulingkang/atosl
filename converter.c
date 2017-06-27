@@ -273,6 +273,12 @@ const char * dwarf_form_name (unsigned form)
             return "DW_FORM_indirect";
             //case DW_FORM_APPLE_db_str:
             //  return "DW_FORM_APPLE_db_str";
+        case DW_FORM_sec_offset:
+            return "DW_FORM_sec_offset";
+        case DW_FORM_exprloc:
+            return "DW_FORM_exprloc";
+        case DW_FORM_flag_present:
+            return "DW_FORM_flag_present";
         default:
             return "DW_FORM_<unknown>";
     }
@@ -408,4 +414,3 @@ const char * dwarf_tag_name (unsigned tag)
             return "DW_TAG_<unknown>";
     }
 }
-

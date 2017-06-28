@@ -81,9 +81,9 @@ int symbolicate(const char* arch, const char *executable, char *addresses[], int
         return -1;
     }
     thin_macho = tf->thin_machos[i];
-    //#ifdef DEBUG
+    // #ifdef DEBUG
     //    print_all_dwarf2_per_objfile(thin_macho->dwarf2_per_objfile);
-    //#endif
+    // #endif
 
     debug("thin_macho->dwarf2_per_objfile: %p.", thin_macho->dwarf2_per_objfile);
     if(thin_macho->dwarf2_per_objfile != NULL){

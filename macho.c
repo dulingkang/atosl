@@ -1098,6 +1098,7 @@ static struct dwarf2_per_objfile* parse_dwarf_segment_64(char *macho_str, long o
         }
         memset(temp, '\0', (uint32_t)dwarf_section_headers[i].size);
         memcpy(temp, macho_str + dwarf_section_headers[i].offset, (uint32_t)dwarf_section_headers[i].size);
+
         if(strcmp(dwarf_section_headers[i].sectname, "__debug_abbrev") == 0){
             dwarf2_per_objfile->abbrev_buffer = temp;
             dwarf2_per_objfile->abbrev_size = (uint32_t)dwarf_section_headers[i].size;
@@ -1465,7 +1466,7 @@ int select_thin_macho_by_arch(struct target_file *tf, const char *target_arch){
                arch = "ppc64";
                break;
             case CPU_TYPE_ARM64:
-                //arm64
+                //ppc64
                 arch = "arm64";
                 break;
 
@@ -1516,6 +1517,7 @@ struct target_file *parse_file(const char *filename){
             fclose(fp);
             return NULL;
         }
+        debug("magic_number: %x\n", magic_number);
         switch(magic_number){
             case MH_MAGIC:
                 //current machine endian is same with host machine
@@ -1650,7 +1652,7 @@ int parse_universal(FILE *fp, uint32_t magic_number, struct target_file *tf){
             uint32_endian_convert(&fh.nfat_arch);
         }
         nfat_arch = fh.nfat_arch;
-        // printf("nfat_arch: %u\n", nfat_arch);
+        //printf("nfat_arch: %u\n", nfat_arch);
     }
     //free maloc failed?
     tf->numofarchs = nfat_arch;
@@ -1700,7 +1702,7 @@ int parse_macho(struct thin_macho*tm){
 
     uint32_t magic_number = 0;
     memcpy(&magic_number, macho_str, sizeof(uint32_t));
-    // printf("magic_number: %x\n", magic_number);
+    //printf("magic_number: %x\n", magic_number);
     switch(magic_number){
         case MH_MAGIC:
             {
@@ -1726,7 +1728,6 @@ int parse_macho(struct thin_macho*tm){
                 num_load_cmds = mh64.ncmds;
                 tm->cputype = mh64.cputype;
                 tm->cpusubtype = mh64.cpusubtype;
-                debug("num_load_cmds=%d,cputype=%d, subtype=%d", num_load_cmds, tm->cputype, tm->cpusubtype);
                 break;
             }
         case MH_CIGAM:
@@ -2393,7 +2394,7 @@ static int parse_dwarf_abbrev(struct dwarf2_per_objfile *dwarf2_per_objfile){
             while(attr_name_code != 0 || attr_form_code != 0){
                 attrs[j].name = attr_name_code;
                 attrs[j].form = attr_form_code;
-                // debug("%s %s\n", dwarf_attr_name(attrs[j].name), dwarf_form_name(attrs[j].form));
+                debug("%s %s\n", dwarf_attr_name(attrs[j].name), dwarf_form_name(attrs[j].form));
                 attr_name_code = (unsigned int)read_unsigned_leb128(info_ptr ,&bytes_read);
                 info_ptr += bytes_read;
                 attr_form_code = (unsigned int)read_unsigned_leb128(info_ptr ,&bytes_read);
@@ -2736,7 +2737,6 @@ int lookup_by_address_in_symtable(struct thin_macho *tm, CORE_ADDR integer_addre
 
 int lookup_by_address_in_dwarf(struct thin_macho *thin_macho, CORE_ADDR integer_address){
     CORE_ADDR address = (CORE_ADDR)integer_address;
-    debug("address = 0x%016llx", address);
     struct dwarf2_per_objfile* dwarf2_per_objfile = thin_macho->dwarf2_per_objfile;
     unsigned int num = dwarf2_per_objfile->n_aranges;
     struct arange **all_aranges = dwarf2_per_objfile->all_aranges;
@@ -2749,7 +2749,7 @@ int lookup_by_address_in_dwarf(struct thin_macho *thin_macho, CORE_ADDR integer_
             //debug
             CORE_ADDR beginning_addr = arange->address_range_descriptors[j].beginning_addr;
             CORE_ADDR ending_addr = arange->address_range_descriptors[j].beginning_addr + arange->address_range_descriptors[j].length;
-            debug("0x%016llx + 0x%016llx = 0x%016llx\n", arange->address_range_descriptors[j].beginning_addr, arange->address_range_descriptors[j].length, arange->address_range_descriptors[j].beginning_addr + arange->address_range_descriptors[j].length);
+            //printf("0x%016llx + 0x%016llx = 0x%016llx\n", arange->address_range_descriptors[j].beginning_addr, arange->address_range_descriptors[j].length, arange->address_range_descriptors[j].beginning_addr + arange->address_range_descriptors[j].length);
             if (address >= beginning_addr && address < ending_addr){
                 target_arange = arange;
                 target_ard = &arange->address_range_descriptors[j];

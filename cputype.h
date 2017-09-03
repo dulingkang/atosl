@@ -305,8 +305,6 @@
 
 //add arm64
 #define CPU_TYPE_ARM64 ((cpu_type_t)16777228)
-#define CPU_SUBTYPE_ARM64_ALL ((cpu_subtype_t)0)
-
 #endif /* !__ASSEMBLER__ */
 
 /*
